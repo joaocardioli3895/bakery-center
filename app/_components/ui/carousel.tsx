@@ -103,7 +103,7 @@ const Carousel = React.forwardRef<
         return;
       }
 
-      setApi(api);
+      setApi();
     }, [api, setApi]);
 
     React.useEffect(() => {
