@@ -42,12 +42,14 @@ const Header = () => {
           href="/"
           className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0"
         >
-          <div className="relative h-[30px] w-[100px]">
+          <div className="relative">
             <Image
               src="https://cdn.outback.com.br/wp-data/wp-content/themes/outback_2022/assets/images/outback-logo.png"
-              alt="FSW Foods"
+              alt="Clube Outback Steakhouse | Oficial"
               sizes="100%"
-              fill
+              width={100}
+              height={100}
+            
               className="object-cover"
             />
           </div>
