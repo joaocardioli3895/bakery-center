@@ -109,6 +109,8 @@ export default function Footer() {
               <Image
                 src="https://www.outback.com.br/wp-content/themes/outback_2022/assets/images/app_store.webp"
                 alt="App Store"
+                width={200}
+                height={90}
                 className="h-9 object-contain"
               />
             </a>
@@ -121,6 +123,8 @@ export default function Footer() {
               <Image
                 src="https://www.outback.com.br/wp-content/themes/outback_2022/assets/images/google_play.webp"
                 alt="Google Play"
+                width={200}
+                height={90}
                 className="h-9 object-contain"
               />
             </a>

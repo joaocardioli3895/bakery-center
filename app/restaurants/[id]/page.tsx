@@ -151,7 +151,7 @@ const RestaurantPage = async ({ params: { id } }: RestaurantPageProps) => {
           </div>
         ))}
 
-        <CartBanner restaurant={restaurant} />
+        <CartBanner />
       </div>
     </>
   );
