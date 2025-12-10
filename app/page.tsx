@@ -9,7 +9,7 @@ import Footer from "./_components/footer";
 // Ok, já está funcionando de acordo com o contexto que fizemos, mas estou com um bug com relação a este botão do meu header que passei como carrinho também para ajudar na experiencia do usuário,
 
 const Home = async () => {
-  const FEATURED_RESTAURANT_ID = "cbd66d5e-2f88-40b8-ae43-c8451d595c1c";
+  const FEATURED_RESTAURANT_ID = "4deac78f-dda3-4f71-a733-a1ed03833cde";
 
   //const session = await getServerSession(authOptions);
 
