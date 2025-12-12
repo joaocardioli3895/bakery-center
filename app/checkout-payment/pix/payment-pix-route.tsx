@@ -61,8 +61,8 @@ const PaymentPixRoute = () => {
    <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="flex justify-center ">
-        <div className="sticky z-30 -mt-7 flex  h-20 w-11/12  items-end justify-center rounded-3xl bg-son px-4 py-4 shadow-lg">
-          <h1 className="flex  text-xl font-bold  text-primary-foreground">
+        <div className="sticky z-30 -mt-2 flex h-30 w-11/12   justify-center rounded-3xl bg-son px-4  py-4 shadow-lg">
+          <h1 className="flex flex-col justify-start items-center text-center    text-xl font-bold  text-primary-foreground">
             Pedido Realizado com Sucesso!
             <BadgeCheck className="ml-2 h-7 w-7 text-white" />
           </h1>

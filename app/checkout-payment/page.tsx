@@ -21,6 +21,8 @@ import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { useThreeDS } from "./hooks/three-ds";
 import { Icons } from "../_components/icons";
+import { createOrder } from "../_components/_actions/order";
+import { Prisma } from "@prisma/client";
 // import {
 //   Accordion,
 //   AccordionContent,
@@ -205,6 +207,7 @@ const CheckoutPaymentRoute = ({
     }
     //console.log(products);
     if (paymentMethod === "pix") {
+      setPaymentMethod("pix");
       setIsSubmitLoading(true);
       const payload = {
         paymentMethod: "pix",
@@ -235,9 +238,48 @@ const CheckoutPaymentRoute = ({
       console.log("Resposta da API:", out);
       const q = encodeURIComponent(out.pix.qrcode);
 
+      //MONTAR O PAYLOAD PARA CRIAR A ORDER INDEPENDENTE DO MÉTODO DE PAGAMENTO
+
+      const orderPayload: Prisma.OrderCreateInput = {
+        subtotalPrice: totalPriceInCents,
+        totalPrice: totalPrice,
+        totalDiscounts: 0,
+        deliveryFee: 0,
+        deliveryTimeMinutes: 40,
+        street: address.street,
+        number: address.number,
+        neighborhood: address.neighborhood,
+        city: address.city,
+        state: address.state,
+
+        status:
+          paymentMethod.toLowerCase() === "pix" || "card"
+            ? "CONFIRMED"
+            : "COMPLETED",
+        user: {
+          connect: { id: data?.user.id || "" },
+        },
+        restaurant: {
+          connect: { id: products[0].restaurant.id },
+        },
+        products: {
+          createMany: {
+            data: products.map((product) => ({
+              productId: product.id,
+              quantity: product.quantity,
+            })),
+          },
+        },
+      };
+      const debug = await createOrder(orderPayload);
+      console.log("Order criada:", debug);
+      setIsSubmitLoading(false);
+
       navigate.push(`/checkout-payment/pix?orderId=${orderId}&qrcode=${q}`);
+
       setIsSubmitLoading(false);
     } else {
+      setPaymentMethod("card");
       if (
         !cardData.number ||
         !cardData.name ||
@@ -325,7 +367,12 @@ const CheckoutPaymentRoute = ({
 
         console.log("Resposta da API:", response);
         const out = await response.json();
-
+        if (!response.ok) {
+          toast("Pedido confirmado!", {
+            description: "Seu pedido foi realizado com sucesso",
+            duration: 4000,
+          });
+        }
         if (out?.threeDS?.redirectUrl) {
           setIsSubmitLoading(true);
           navigate.push(out.threeDS.redirectUrl);
@@ -336,12 +383,6 @@ const CheckoutPaymentRoute = ({
       } catch (error) {
         console.error("Erro ao tokenizar o cartão:", error);
       }
-      setIsSubmitLoading(false);
-
-      toast("Pedido confirmado!", {
-        description: "Seu pedido foi realizado com sucesso",
-        duration: 4000,
-      });
 
       // setTimeout(() => navigate.push("/"), 2000);
     }
@@ -392,7 +433,6 @@ const CheckoutPaymentRoute = ({
                     }
                     className="mt-1 "
                   />
-
                 </div>
                 <div>
                   <Label htmlFor="number">Número</Label>
@@ -657,7 +697,9 @@ const CheckoutPaymentRoute = ({
             <div className="space-y-1 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span className="font-medium">{formatCurrency(totalPrice)}</span>
+                <span className="font-medium">
+                  {formatCurrency(totalPrice)}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Taxa de entrega</span>
