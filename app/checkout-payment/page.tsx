@@ -141,6 +141,7 @@ const CheckoutPaymentRoute = ({
   // Address form state
   const [address, setAddress] = useState({
     street: "",
+    zip: "",
     number: "",
     neighborhood: "",
     city: "",
@@ -379,6 +380,19 @@ const CheckoutPaymentRoute = ({
                     }
                     className="mt-1 "
                   />
+                </div>
+                <div>
+                  <Label htmlFor="number">CEP</Label>
+                  <Input
+                    id="cep"
+                    placeholder="00000-000"
+                    value={address.zip}
+                    onChange={(e) =>
+                      setAddress({ ...address, zip: e.target.value })
+                    }
+                    className="mt-1 "
+                  />
+
                 </div>
                 <div>
                   <Label htmlFor="number">Número</Label>
@@ -643,11 +657,11 @@ const CheckoutPaymentRoute = ({
             <div className="space-y-1 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span className="font-medium">R$ 45,90</span>
+                <span className="font-medium">{formatCurrency(totalPrice)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Taxa de entrega</span>
-                <span className="font-medium">R$ 5,00</span>
+                <span className="font-medium text-success">GRATIS</span>
               </div>
               {/* {couponCode && (
                 <div className="flex justify-between text-success">

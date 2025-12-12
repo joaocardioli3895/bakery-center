@@ -16,9 +16,9 @@ const ConditionalSearch = () => {
 
   return (
     <>
-      <div className=" hidden w-2/4 md:block">
+      {/* <div className=" hidden w-2/4 md:block">
         {showSearch ? <Search /> : null}
-      </div>
+      </div> */}
     </>
   );
 };

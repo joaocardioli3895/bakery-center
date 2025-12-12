@@ -43,6 +43,8 @@ const Cart = ({ setIsOpen }: CartProps) => {
       return;
     }
     setIsSubmitLoading(true);
+
+    
     router.push(`/checkout-payment?order=${tempOrderId}`);
   };
 

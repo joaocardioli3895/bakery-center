@@ -1,7 +1,7 @@
 'use client' // Marca este componente como um Client Component
 
 import { useContext, useEffect, useState } from "react";
-import { QrCode, Copy, CheckCircle2, Clock } from "lucide-react";
+import { QrCode, Copy, CheckCircle2, Clock, BadgeCheck } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Card } from "@/app/_components/ui/card";
@@ -63,7 +63,8 @@ const PaymentPixRoute = () => {
       <header className="flex justify-center ">
         <div className="sticky z-30 -mt-7 flex  h-20 w-11/12  items-end justify-center rounded-3xl bg-son px-4 py-4 shadow-lg">
           <h1 className="flex  text-xl font-bold  text-primary-foreground">
-            Pagamento via PIX
+            Pedido Realizado com Sucesso!
+            <BadgeCheck className="ml-2 h-7 w-7 text-white" />
           </h1>
         </div>
       </header>
@@ -87,7 +88,7 @@ const PaymentPixRoute = () => {
             </div>
             <h2 className="mb-2 text-xl font-bold">Escaneie o QR Code</h2>
             <p className="text-sm text-muted-foreground">
-              Abra o app do seu banco e escaneie o código abaixo
+             Seu pedido já está quase chegando! Escaneie o QR Code ou copie o código PIX abaixo para concluir o pagamento.
             </p>
           </div>
 

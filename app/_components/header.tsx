@@ -167,19 +167,19 @@ const Header = () => {
                             asChild
                           >
                             <Link href="/my-favorite-restaurants">
-                              <HeartIcon size={16} />
+                              {/* <HeartIcon size={16} />
                               <span className="block">
                                 Restaurantes Favoritos
-                              </span>
+                              </span> */}
                             </Link>
                           </Button>
                         </>
                       )}
                     </div>
 
-                    <div className="py-6">
+                    {/* <div className="py-1">
                       <Separator />
-                    </div>
+                    </div> */}
 
                     {data?.user && (
                       <Button
