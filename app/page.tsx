@@ -1,10 +1,5 @@
-import CategoryList from "./_components/category-list";
-import Header from "./_components/header";
-import ProductList from "./_components/product-list";
-import { db } from "./_lib/prisma";
-import { HeroCarousel } from "./_components/carousel-images";
-import { ProductFeatured } from "./_components/product-featured";
 import Footer from "./_components/footer";
+import RestaurantPage from "./restaurants/[id]/page";
 
 // Ok, já está funcionando de acordo com o contexto que fizemos, mas estou com um bug com relação a este botão do meu header que passei como carrinho também para ajudar na experiencia do usuário,
 
@@ -19,65 +14,51 @@ const Home = async () => {
   //   },
   // });
 
-  const products = await db.product.findMany({
-    where: {
-      restaurantId: FEATURED_RESTAURANT_ID,
-      discountPercentage: {
-        gte: 38,
-      },
-    },
-    take: 8,
-    include: {
-      restaurant: {
-        select: {
-          name: true,
-        },
-      },
-    },
-  });
+
 
   //console.log("Produtos em destaque:", products);
-  const restaurant = await db.restaurant.findUnique({
-    where: {
-      id: FEATURED_RESTAURANT_ID,
-    },
-    include: {
-      categories: {
-        orderBy: {
-          order: "asc",
-        },
-        include: {
-          products: {
-            where: {
-              restaurantId: FEATURED_RESTAURANT_ID,
-            },
-            take: 10,
-            include: {
-              restaurant: {
-                select: { name: true },
-              },
-            },
-          },
-        },
-      },
-      products: {
-        take: 10,
-        include: {
-          restaurant: {
-            select: { name: true },
-          },
-        },
-      },
-    },
-  });
+  // const restaurant = await db.restaurant.findUnique({
+  //   where: {
+  //     id: FEATURED_RESTAURANT_ID,
+  //   },
+  //   include: {
+  //     categories: {
+  //       orderBy: {
+  //         order: "asc",
+  //       },
+  //       include: {
+  //         products: {
+  //           where: {
+  //             restaurantId: FEATURED_RESTAURANT_ID,
+  //           },
+  //           take: 10,
+  //           include: {
+  //             restaurant: {
+  //               select: { name: true },
+  //             },
+  //           },
+  //         },
+  //       },
+  //     },
+  //     products: {
+  //       take: 10,
+  //       include: {
+  //         restaurant: {
+  //           select: { name: true },
+  //         },
+  //       },
+  //     },
+  //   },
+  // });
 
   //console.log("retorno do restaurante",restaurant);
   //console.log("retorno do restaurante",restaurant?.categories.map((category) => category.products));
 
   return (
     <>
-      <Header />
-      <HeroCarousel />
+      {/* <Header /> */}
+     
+      <RestaurantPage params={{ id: FEATURED_RESTAURANT_ID }} />
       {/* <div className="flex-row items-center px-6 py-2 pt-5 md:flex md:h-[350px] md:bg-tematic md:py-2">
         <div className=" flex flex-row items-center justify-between md:mt-5 md:w-full lg:gap-20 xl:gap-48 ">
           <div className="w-full flex-col justify-center md:w-2/4">
@@ -106,9 +87,7 @@ const Home = async () => {
         </div>
       </div> */}
 
-      <div className="px-1 pt-5">
-        <CategoryList />
-      </div>
+      
 
       {/* <div className="w-full px-5 pt-6 md:hidden">
         <h1>Promocoes</h1>
@@ -118,24 +97,7 @@ const Home = async () => {
         />
       </div> */}
 
-      <div className="flex flex-col justify-between gap-4 px-2  pt-6 md:flex">
-        <div>
-          <h1 className="text-xl font-bold text-tematic">
-            Super Promoção de Black Friday Para Você até 50% OFF!
-          </h1>
-        </div>
-        <div className="flex justify-between gap-4  ">
-          <div className=" scrollbar-hide grid w-full auto-cols-[minmax(280px,1fr)] grid-flow-col grid-rows-2 gap-4 overflow-x-auto pb-2">
-            {products.map((product) => (
-              <ProductFeatured
-                key={product.id}
-                product={product}
-                className="min-w-full"
-              />
-            ))}
-          </div>
-        </div>
-      </div>
+    
       {/* <PromoBanner
             src="/promo-banner-01.png"
             alt="Até 30% de desconto em pizzas!"
@@ -173,13 +135,15 @@ const Home = async () => {
               userFavoriteRestaurants={userFavoriteRestaurants}
             />
           </div> */}
-      <div className="flex h-3"></div>
+
+
+      {/* <div className="flex h-3"></div>
       {restaurant?.categories.map((category) => (
         <div className="mt-2 space-y-2 py-2" key={category.id}>
           <h2 className="px-2 text-lg font-semibold">{category.name}</h2>
           <ProductList products={category.products} />
         </div>
-      ))}
+      ))} */}
 
       {/* <div className="space-y-4 py-6">
         <div className="flex items-center justify-between px-5">
