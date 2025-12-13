@@ -1,15 +1,15 @@
 import { db } from "@/app/_lib/prisma";
 import { notFound } from "next/navigation";
-import RestaurantImage from "./_components/restaurant-image";
 import Image from "next/image";
 import { StarIcon } from "lucide-react";
 import DeliveryInfo from "@/app/_components/delivery-info";
 //import ProductList from "@/app/_components/product-list";
 import CartBanner from "./_components/cart-banner";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/_lib/auth";
 import Header from "@/app/_components/header";
 import ProductList from "@/app/_components/product-list";
+import CategoryList from "@/app/_components/category-list";
+import { ProductFeatured } from "@/app/_components/product-featured";
+import { HeroCarousel } from "@/app/_components/carousel-images";
 
 export interface RestaurantPageProps {
   params: {
@@ -18,6 +18,22 @@ export interface RestaurantPageProps {
 }
 
 const RestaurantPage = async ({ params: { id } }: RestaurantPageProps) => {
+  const products = await db.product.findMany({
+    where: {
+      restaurantId: id,
+      discountPercentage: {
+        gte: 38,
+      },
+    },
+    take: 8,
+    include: {
+      restaurant: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
   const restaurant = await db.restaurant.findUnique({
     where: {
       id,
@@ -25,7 +41,7 @@ const RestaurantPage = async ({ params: { id } }: RestaurantPageProps) => {
     include: {
       categories: {
         orderBy: {
-          createdAt: "desc",
+          order: "asc",
         },
         include: {
           products: {
@@ -46,9 +62,7 @@ const RestaurantPage = async ({ params: { id } }: RestaurantPageProps) => {
         take: 10,
         include: {
           restaurant: {
-            select: {
-              name: true,
-            },
+            select: { name: true },
           },
         },
       },
@@ -59,27 +73,29 @@ const RestaurantPage = async ({ params: { id } }: RestaurantPageProps) => {
     return notFound();
   }
 
-  const session = await getServerSession(authOptions);
+  // const session = await getServerSession(authOptions);
 
-  const userFavoriteRestaurants = await db.userFavoriteRestaurant.findMany({
-    where: {
-      userId: session?.user.id,
-    },
-  });
+  // const userFavoriteRestaurants = await db.userFavoriteRestaurant.findMany({
+  //   where: {
+  //     userId: session?.user.id,
+  //   },
+  // });
 
   return (
     <>
       <div className=" sticky top-0 z-50">
         <Header />
+       
       </div>
 
       <div className="mt-0 md:mt-7">
         <div className="flex flex-col gap-0 md:flex-row md:gap-6 md:px-5">
           <div className="md:w-1/2">
-            <RestaurantImage
+            {/* <RestaurantImage
               restaurant={restaurant}
               userFavoriteRestaurants={userFavoriteRestaurants}
-            />
+            /> */}
+            <HeroCarousel />
           </div>
 
           <div className=" rounded-lg border border-solid shadow-sm md:w-1/2 md:py-6">
@@ -113,6 +129,7 @@ const RestaurantPage = async ({ params: { id } }: RestaurantPageProps) => {
               <DeliveryInfo restaurant={restaurant} />
             </div>
 
+
             <div className="mt-3 flex gap-4 overflow-x-scroll px-5 [&::-webkit-scrollbar]:hidden">
               {restaurant.categories.map((category) => (
                 <div
@@ -128,13 +145,40 @@ const RestaurantPage = async ({ params: { id } }: RestaurantPageProps) => {
             <div className="mt-6 space-y-3 px-5">
               <h3 className=" font-semibold">Sobre</h3>
               <p className="pb-5 text-xs text-muted-foreground md:pb-0">
-                O SushiDojo é uma joia gastronômica que transporta seus clientes
-                para o coração do Japão, com sua atmosfera serena, design
-                minimalista e um balcão de sushi onde mestres habilidosos
-                preparam pratos autênticos com ingredientes frescos e
-                selecionados, garantindo uma experiência culinária excepcional e
-                memorável.
+                Sejam bem-vindos ao Outback Steakhouse. batata, fritas, fries,
+                costelinha, costela, burger, hamburger, sanduíche, camarão,
+                pasta, bacon, iced tea, chá, barbecue, cebola, chicken, frango
+                empanado, família, Steakhouse, Steaks, carnes, tortilhas,
+                quesadilhas, doce de leite, Fish, tilápia, peixe, mac and
+                Cheese, saladas, sobremesas, brownie, brownie havanna, Smoked,
+                caesar, arroz, vegetariano, molhos, smores, laranja, morango,
+                chopp, red bull, vinho, chocolate, churrasco, suco, brioche,
+                bbq, compartilhar. Outback, Abbraccio, Aussie Grill
               </p>
+            </div>
+          </div>
+        </div>
+
+        
+
+        <div className="px-1 pt-5">
+          <CategoryList />
+        </div>
+        <div className="flex flex-col justify-between gap-4 px-2  pt-6 md:flex">
+          <div>
+            <h1 className="text-xl font-bold text-tematic">
+              Super Promoção de Black Friday Para Você até 50% OFF!
+            </h1>
+          </div>
+          <div className="flex justify-between gap-4  ">
+            <div className=" scrollbar-hide grid w-full auto-cols-[minmax(280px,1fr)] grid-flow-col grid-rows-2 gap-4 overflow-x-auto pb-2">
+              {products.map((product) => (
+                <ProductFeatured
+                  key={product.id}
+                  product={product}
+                  className="min-w-full"
+                />
+              ))}
             </div>
           </div>
         </div>

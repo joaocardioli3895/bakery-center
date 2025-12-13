@@ -306,18 +306,11 @@ const CheckoutPaymentRoute = ({
           case "IFRAME":
             injectIframe(settings.iframeUrl);
             break;
-
           case "REDIRECT":
-            // o redirect só acontece após createPayment
             break;
-
           case "SCRIPT":
-            //console.log("Usando 3DS via SCRIPT");
-            // nada a fazer — o próprio script já faz tudo
             break;
-
           case "NONE":
-            // segue fluxo sem 3DS
             break;
         }
         // const amountCents = window["ShieldHelper"].convertDecimalToCents(
@@ -367,11 +360,14 @@ const CheckoutPaymentRoute = ({
 
         console.log("Resposta da API:", response);
         const out = await response.json();
-        if (!response.ok) {
-          toast("Pedido confirmado!", {
-            description: "Seu pedido foi realizado com sucesso",
-            duration: 4000,
-          });
+        if (response.ok) {
+          toast(
+            "❌ Desculpe, Houve uma falha ao Realizar o Pagamento do Pedido! ",
+            {
+              description: "Houve uma falha ao Realizar o Pagamento do Pedido!",
+              duration: 6000,
+            },
+          );
         }
         if (out?.threeDS?.redirectUrl) {
           setIsSubmitLoading(true);
