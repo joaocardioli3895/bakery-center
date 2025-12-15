@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Icons } from "./icons";
 import { Input } from "./ui/input";
+import { signIn } from "next-auth/react";
 
 interface IUser {
   name: string;
@@ -13,6 +14,7 @@ interface IUser {
 
 const UserRegisterAuth = () => {
   const router = useRouter();
+  const tempOrderId = crypto.randomUUID();
 
   const [data, setData] = useState<IUser>({
     name: "",
@@ -64,7 +66,22 @@ const UserRegisterAuth = () => {
         }));
       }
     } else {
-      router.push("/login");
+
+      const login = await signIn("credentials", {
+        redirect: false,
+        email: data.email,
+        password: data.password,
+        callbackUrl: "/",
+      });
+      if (login?.error) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          server: "Erro ao fazer login após o registro.",
+        }));
+      } else {
+        router.push(`/checkout-payment?order=${tempOrderId}`);
+      }
+      //router.push("/login");
     }
 
     setData({
@@ -86,79 +103,91 @@ const UserRegisterAuth = () => {
 
   return (
     <div className="flex flex-col justify-center">
-      <form onSubmit={onSubmit}>
-        <div className="grid gap-2">
-          <div className="grid gap-1">
+      <form onSubmit={onSubmit} className="px-5 lg:px-10">
+        <div className="-space-y-px rounded-md shadow-sm">
+          <div>
             <label className="sr-only" htmlFor="name">
-              Name
+              Nome
             </label>
             <Input
               id="name"
               placeholder="Nome"
               type="text"
-              autoCapitalize="none"
-              autoCorrect="off"
               disabled={isLoading}
               name="name"
               value={data.name}
               onChange={handleChange}
+              className="my-5 h-12 rounded-2xl border-none bg-[#e5e7eb] 
+        px-4 focus:border-gray-800 focus:ring focus:ring-gray-800"
             />
             {errors.name && (
               <span className="text-xs text-red-500">{errors.name}</span>
             )}
           </div>
-          <div className="grid gap-1">
+
+          <div>
             <label className="sr-only" htmlFor="email">
               Email
             </label>
             <Input
               id="email"
-              placeholder="name@example.com"
+              placeholder="Email"
               type="email"
-              autoCapitalize="none"
               autoComplete="email"
-              autoCorrect="off"
               disabled={isLoading}
               name="email"
               value={data.email}
               onChange={handleChange}
+              className="my-5 h-12 rounded-2xl border-none bg-[#e5e7eb] 
+        px-4 focus:border-gray-800 focus:ring focus:ring-gray-800"
             />
             {errors.email && (
               <span className="text-xs text-red-500">{errors.email}</span>
             )}
           </div>
-          <div className="grid gap-1">
+
+          <div>
             <label className="sr-only" htmlFor="password">
-              Password
+              Senha
             </label>
             <Input
               id="password"
               placeholder="Senha"
               type="password"
-              autoCapitalize="none"
-              autoCorrect="off"
               disabled={isLoading}
               name="password"
               value={data.password}
               onChange={handleChange}
+              className="my-5 h-12 rounded-2xl border-none bg-[#e5e7eb] 
+        px-4 focus:border-gray-800 focus:ring focus:ring-gray-800"
             />
             {errors.password && (
               <span className="text-xs text-red-500">{errors.password}</span>
             )}
           </div>
+        </div>
+
+        <div className="flex pt-4">
           <button
-            className="group relative mt-5 flex w-full justify-center rounded-md border border-transparent bg-primary bg-tematic px-4 py-2 text-sm font-medium text-white hover:bg-son "
+            type="submit"
             disabled={isLoading}
+            className="group relative flex h-14 w-full justify-center 
+      rounded-3xl border border-transparent bg-primary bg-tematic 
+      px-4 items-center  text-base font-semibold uppercase text-white 
+      hover:bg-son"
           >
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
             Registrar
           </button>
-          {errors.server && (
-            <span className="mt-2 text-xs text-red-500">{errors.server}</span>
-          )}
         </div>
+
+        {errors.server && (
+          <span className="mt-2 block text-center text-xs text-red-500">
+            {errors.server}
+          </span>
+        )}
       </form>
     </div>
   );

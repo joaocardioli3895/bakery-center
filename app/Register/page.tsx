@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import UserRegisterAuth from "../_components/user-register-auth";
 
 const Register = () => {
@@ -30,15 +29,15 @@ const Register = () => {
           width={150}
           height={150}
         />
-        <h2 className="pt-1 text-center text-base font-extrabold text-muted-foreground lg:text-lg">
-          Criar Conta
+        <h2 className="pt-5 text-center text-xl font-semibold uppercase tracking-wider text-tematic lg:text-lg">
+          Crie sua Conta
         </h2>
 
         <div className="w-full p-6">
           <UserRegisterAuth />
         </div>
 
-        <div className="flex w-2/4 min-w-72 justify-center text-center">
+        {/* <div className="flex w-2/4 min-w-72 justify-center text-center">
           <p className="px-8 text-center text-sm text-muted-foreground">
             Ao clicar em continuar, você concorda com nossos{" "}
             <Link
@@ -55,7 +54,7 @@ const Register = () => {
               Política de Privacidade
             </Link>
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

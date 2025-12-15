@@ -51,9 +51,9 @@ const UserLoginAuth = () => {
     }
   };
 
-  const handleGoogleSignIn = () => {
-    signIn("google", { callbackUrl: "/" });
-  };
+  // const handleGoogleSignIn = () => {
+  //   signIn("google", { callbackUrl: "/" });
+  // };
 
   return (
     <div>
@@ -75,7 +75,8 @@ const UserLoginAuth = () => {
               autoComplete="email"
               required
               placeholder="Email"
-              className="my-5"
+              className="bg-[#e5e7eb] my-5 h-12 rounded-2xl border-none 
+px-4 focus:border-gray-800 focus:ring focus:ring-gray-800"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -84,7 +85,7 @@ const UserLoginAuth = () => {
             )}
           </div>
           <div>
-            <label htmlFor="password" className="sr-only">
+            <label htmlFor="password" className="sr-only ">
               Senha
             </label>
             <Input
@@ -92,6 +93,8 @@ const UserLoginAuth = () => {
               name="password"
               type="password"
               autoComplete="current-password"
+              className="bg-[#e5e7eb] my-5 h-12 rounded-2xl border-none 
+px-4 focus:border-gray-800 focus:ring focus:ring-gray-800"
               required
               placeholder="Senha"
               value={password}
@@ -103,16 +106,10 @@ const UserLoginAuth = () => {
           </div>
         </div>
 
-        <Link href="/Register">
-          <p className="py-2 text-xs text-muted-foreground hover:text-primary">
-            Criar cadastro
-          </p>
-        </Link>
-
-        <div className="flex space-x-4">
+        <div className="flex space-x-4 pt-4">
           <Button
             type="submit"
-            className="group relative flex w-1/2 justify-center rounded-md border border-transparent bg-primary bg-tematic px-4 py-2 text-sm font-medium text-white hover:bg-son"
+            className="group relative flex h-14  w-full justify-center rounded-3xl border border-transparent bg-primary bg-tematic px-4 py-2 text-base font-semibold uppercase  text-white hover:bg-son "
           >
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin " />
@@ -120,15 +117,21 @@ const UserLoginAuth = () => {
             Entrar
           </Button>
 
-          <Button
+          {/* <Button
             type="button"
             className="group relative flex w-1/2 justify-center rounded-md border 
             border-[#7e8390] bg-white  px-4  py-2 text-[10px] font-medium text-[#7e8390] hover:border-red-600 hover:bg-accent hover:text-red-600  lg:text-sm"
             onClick={handleGoogleSignIn}
-          >
+            >
             <Icons.google className="mr-2 h-4 w-4" />
             Entrar com Google
-          </Button>
+            </Button> */}
+        </div>
+        <div className="flex justify-center space-x-2 py-10 font-medium tracking-wider">
+          <span className="">Não possui uma conta?</span>
+          <Link href="/Register">
+            <p className=" text-tematic hover:text-primary">Cadastre-se</p>
+          </Link>
         </div>
       </form>
     </div>

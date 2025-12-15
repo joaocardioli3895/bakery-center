@@ -2,19 +2,18 @@
 
 import Image from "next/image";
 import UserLoginAuth from "../_components/user-login-auth";
-import Link from "next/link";
 
 const Login = () => {
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
-      <div className="hidden w-full items-center justify-center bg-[#e6232d] p-6 md:flex md:w-1/2">
+      <div className="hidden w-full items-center justify-center bg-[#e6232d] p-6 md:flex md:w-1/2 ">
         <div className="flex w-full max-w-md items-center justify-center space-y-8">
           <div>
             <Image
-              width={300}
-              height={300}
-              src="/https://cdn.outback.com.br/wp-data/wp-content/themes/outback_2022/assets/images/outback-logo.png"
-              alt="FSW food"
+              width={500}
+              height={500}
+              src="https://cdn.outback.com.br/b2c/logo.svg"
+              alt="Club Outback Steakhouse Logo"
               layout="fixed"
               objectFit="cover"
               quality={100}
@@ -30,15 +29,15 @@ const Login = () => {
           width={150}
           height={150}
         />
-        <h2 className="pt-1 text-center text-base font-extrabold text-muted-foreground lg:text-lg">
-          Entre com seus dados de Login
+        <h2 className="pt-5 text-center text-xl font-semibold uppercase tracking-wider text-tematic lg:text-lg">
+          Entrar
         </h2>
 
         <div className="w-full p-6">
           <UserLoginAuth />
         </div>
 
-        <div className="flex w-2/4 min-w-72 justify-center text-center">
+        {/* <div className="flex w-2/4 min-w-72 justify-center text-center">
           <p className="px-8 text-center text-sm text-muted-foreground">
             Ao clicar em continuar, você concorda com nossos{" "}
             <Link
@@ -55,7 +54,7 @@ const Login = () => {
               Política de Privacidade
             </Link>
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -13,6 +13,9 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Outback Steakhouse | Delivery Oficial",
   description: "Encontre refeições acessíveis perto de você",
+  icons: {
+    icon: "https://www.outback.com.br/favicon-32x32.png", // Caminho relativo ao arquivo na pasta public
+  },
 };
 
 export default function RootLayout({
