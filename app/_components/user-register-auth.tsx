@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Icons } from "./icons";
 import { Input } from "./ui/input";
 import { signIn } from "next-auth/react";
+import { CartContext } from "../_context/cart";
 
 interface IUser {
   name: string;
@@ -15,6 +16,7 @@ interface IUser {
 const UserRegisterAuth = () => {
   const router = useRouter();
   const tempOrderId = crypto.randomUUID();
+  const { totalQuantity } = useContext(CartContext);
 
   const [data, setData] = useState<IUser>({
     name: "",
@@ -66,7 +68,6 @@ const UserRegisterAuth = () => {
         }));
       }
     } else {
-
       const login = await signIn("credentials", {
         redirect: false,
         email: data.email,
@@ -79,8 +80,12 @@ const UserRegisterAuth = () => {
           server: "Erro ao fazer login após o registro.",
         }));
       } else {
-        router.push(`/checkout-payment?order=${tempOrderId}`);
+        if (totalQuantity > 0) {
+          router.push(`/checkout-payment?order=${tempOrderId}`);
+          return;
+        }
       }
+      router.push("/");
       //router.push("/login");
     }
 
@@ -171,9 +176,9 @@ const UserRegisterAuth = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="group relative flex h-14 w-full justify-center 
-      rounded-3xl border border-transparent bg-primary bg-tematic 
-      px-4 items-center  text-base font-semibold uppercase text-white 
+            className="group relative flex h-14 w-full items-center 
+      justify-center rounded-3xl border border-transparent bg-primary 
+      bg-tematic px-4  text-base font-semibold uppercase text-white 
       hover:bg-son"
           >
             {isLoading && (
