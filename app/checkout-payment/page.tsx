@@ -87,54 +87,6 @@ const CheckoutPaymentRoute = ({
     quantity: p.quantity,
     tangible: true,
   }));
-  //const [pixData, setPixData] = useState<string | null>(null);
-  // const handleFinishOrderClick = async () => {
-  //   const restaurant = products[0].restaurant;
-  //   try {
-  //     //await new Promise((resolve) => setTimeout(resolve, 300));
-  //     console.log("Pedido finalizado com sucesso!", restaurant);
-
-  //     const order = await createOrder({
-  //       subtotalPrice,
-  //       totalDiscounts,
-  //       totalPrice,
-  //       deliveryFee: restaurant.deliveryFee,
-  //       deliveryTimeMinutes: restaurant.deliveryTimeMinutes,
-  //       restaurant: {
-  //         connect: { id: restaurant.id },
-  //       },
-  //       status: OrderStatus.CONFIRMED,
-  //       user: {
-  //         connect: { id: data.user.id },
-  //       },
-  //       products: {
-  //         createMany: {
-  //           data: products.map((product) => ({
-  //             productId: product.id,
-  //             quantity: product.quantity,
-  //           })),
-  //         },
-  //       },
-  //     });
-
-  //     setIsOpen(false);
-
-  //     // toast("Pedido finalizado com sucesso!", {
-  //     //   description: "Você pode acompanhá-lo na tela dos seus pedidos.",
-  //     //   action: {
-  //     //     label: "Meus Pedidos",
-  //     //     onClick: () => router.push("/my-orders"),
-  //     //   },
-  //     //   duration: 10000,
-  //     // });
-
-  //     // Limpar sómente depois do Pagamento = clearCart();
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setIsSubmitLoading(false);
-  //   }
-  // };
 
   console.log("Produtos no carrinho:", products);
 
@@ -209,10 +161,11 @@ const CheckoutPaymentRoute = ({
     if (paymentMethod === "pix") {
       setPaymentMethod("pix");
       setIsSubmitLoading(true);
+
       const payload = {
-        paymentMethod: "pix",
         amount: totalPriceInCents,
         currency: "BRL",
+        paymentMethod: "pix",
         items,
         customer: {
           name: data?.user.name,
@@ -220,7 +173,19 @@ const CheckoutPaymentRoute = ({
           phone: "11987654321",
           document: {
             type: "cpf",
-            number: "283.097.880-37",
+            number: "28309788037",
+          },
+        },
+        shipping: {
+          name: data?.user.name,
+          address: {
+            street: address.street,
+            number: address.number,
+            complement: "",
+            neighborhood: address.neighborhood,
+            city: address.city,
+            state: address.state,
+            zip: address.zip,
           },
         },
         pix: {
@@ -228,16 +193,21 @@ const CheckoutPaymentRoute = ({
         },
       };
 
+      //console.log("Payload sendo enviado:", payload);
       const res = await fetch("/api/payments", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(payload),
       });
-      console.log("Resposta da API:", res);
+      //console.log("Resposta da API:", res);
 
       const out = await res.json();
-      console.log("Resposta da API:", out);
-      const q = encodeURIComponent(out.pix.qrcode);
+      //console.log("Resposta da API:", out);
 
+      const qr = out.data.paymentData.qrCode;
+      const q = encodeURIComponent(qr);
       //MONTAR O PAYLOAD PARA CRIAR A ORDER INDEPENDENTE DO MÉTODO DE PAGAMENTO
 
       const orderPayload: Prisma.OrderCreateInput = {

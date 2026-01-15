@@ -80,42 +80,39 @@ export type PaymentResponse = {
   [key: string]: unknown;
 };
 
-export async function createPayment(
+export async function createPixPayment(
   dto: CreatePaymentDto,
 ): Promise<PaymentResponse> {
   try {
     //console.log("createPayment chamado com DTO:", JSON.stringify(dto, null, 2));
-    const url = "https://api.blackcatpagamentos.com/v1/transactions";
+    const url = "https://api.blackcatpagamentos.online/api/sales/create-sale";
     const publicKey = process.env.NEXT_PUBLIC_BLACKCAT_PUBLIC_KEY;
     const secretKey = process.env.BLACKCAT_SECRET_KEY;
     if (!publicKey || !secretKey) {
       throw new Error("Chaves de API não configuradas");
     }
-
-    const auth =
-      "Basic " + Buffer.from(`${publicKey}:${secretKey}`).toString("base64");
+    // const auth =
+    //   "Basic " + Buffer.from(`${publicKey}:${secretKey}`).toString("base64");
     const payload = {
       ...dto,
       currency: dto.currency || "BRL",
     };
 
-    //console.log("Payload sendo enviado:", JSON.stringify(payload, null, 2));
-
     const res = await fetch(url, {
       method: "POST",
       headers: {
-        Authorization: auth,
         "Content-Type": "application/json",
+        "X-API-Key": secretKey
       },
       body: JSON.stringify(payload),
     });
 
-    console.log("Status da resposta:", res.status);
-    console.log("Status da resposta:", res);
-    console.log(
-      "Headers da resposta:",
-      Object.fromEntries(res.headers.entries()),
-    );
+    // console.log("Status da resposta:", res.status);
+    // console.log("Status da resposta:", res);
+    // console.log(
+    //   "Headers da resposta:",
+    //   Object.fromEntries(res.headers.entries()),
+    // );
     // if (!res.ok) {
     //   const errorData = await res.json();
     //   console.error("Erro da API:", errorData);
