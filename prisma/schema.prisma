@@ -65,7 +65,7 @@ model Restaurant {
   id                  String                   @id @default(uuid())
   name                String
   imageUrl            String
-  deliveryFee         Int       //Centavos | Real -> Centavos = / 100 |  Centavo -> Real  = * 100
+  deliveryFee         Int //Centavos | Real -> Centavos = / 100 |  Centavo -> Real  = * 100
   deliveryTimeMinutes Int
   categories          Category[]
   products            Product[]
@@ -80,7 +80,7 @@ model UserFavoriteRestaurant {
   restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
   createdAt    DateTime   @default(now())
 
-   @@id([userId, restaurantId])
+  @@id([userId, restaurantId])
 }
 
 model Category {
@@ -93,27 +93,26 @@ model Category {
   createdAt   DateTime     @default(now())
 }
 
-
 model ProductAccompaniment {
-  id        String   @id @default(uuid())
+  id        String  @id @default(uuid())
   label     String
-  product   Product  @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
   productId String
 }
 
 model Product {
-  id                 String         @id @default(uuid())
+  id                 String                 @id @default(uuid())
   name               String
   description        String
   accompaniments     ProductAccompaniment[]
   imageUrl           String
-  price              Decimal        @db.Decimal(10, 2)
-  discountPercentage Int            @default(0)
+  price              Decimal                @db.Decimal(10, 2)
+  discountPercentage Int                    @default(0)
   restaurantId       String
-  restaurant         Restaurant     @relation(fields: [restaurantId], references: [id])
+  restaurant         Restaurant             @relation(fields: [restaurantId], references: [id])
   categoryId         String
-  category           Category       @relation(fields: [categoryId], references: [id])
-  createdAt          DateTime       @default(now())
+  category           Category               @relation(fields: [categoryId], references: [id])
+  createdAt          DateTime               @default(now())
   orderProducts      OrderProduct[]
 }
 
@@ -139,14 +138,15 @@ model Order {
   totalPrice          Decimal        @db.Decimal(10, 2)
   totalDiscounts      Decimal        @db.Decimal(10, 2)
 
-  street              String
-  number              String
-  neighborhood        String
-  city                String
-  state               String
+  street       String
+  number       String
+  neighborhood String
+  city         String
+  state        String
 
-  createdAt           DateTime       @default(now())
-  status              OrderStatus
+  trxId     String?     @unique
+  createdAt DateTime    @default(now())
+  status    OrderStatus
 }
 
 enum OrderStatus {

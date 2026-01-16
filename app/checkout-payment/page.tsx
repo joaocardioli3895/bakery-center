@@ -176,6 +176,7 @@ const CheckoutPaymentRoute = ({
             number: "28309788037",
           },
         },
+        
         shipping: {
           name: data?.user.name,
           address: {
@@ -204,7 +205,7 @@ const CheckoutPaymentRoute = ({
       //console.log("Resposta da API:", res);
 
       const out = await res.json();
-      //console.log("Resposta da API:", out);
+      console.log("Resposta da API:", out);
 
       const qr = out.data.paymentData.qrCode;
       const q = encodeURIComponent(qr);
@@ -221,7 +222,6 @@ const CheckoutPaymentRoute = ({
         neighborhood: address.neighborhood,
         city: address.city,
         state: address.state,
-
         status:
           paymentMethod.toLowerCase() === "pix" || "card"
             ? "CONFIRMED"
@@ -232,6 +232,7 @@ const CheckoutPaymentRoute = ({
         restaurant: {
           connect: { id: products[0].restaurant.id },
         },
+        trxId: out.data.transactionId,
         products: {
           createMany: {
             data: products.map((product) => ({
