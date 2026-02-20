@@ -4,7 +4,7 @@ import RestaurantPage from "./restaurants/[id]/page";
 // Ok, já está funcionando de acordo com o contexto que fizemos, mas estou com um bug com relação a este botão do meu header que passei como carrinho também para ajudar na experiencia do usuário,
 
 const Home = async () => {
-  const FEATURED_RESTAURANT_ID = "4deac78f-dda3-4f71-a733-a1ed03833cde";
+  const FEATURED_RESTAURANT_ID = "5d136a1a-e337-4930-8dc8-bae857d0295b";
 
   //const session = await getServerSession(authOptions);
 
